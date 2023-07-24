@@ -1,7 +1,17 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 
 const Registrar = () => {
+
+   //! States
+   const [nombre, setNombre] = useState('')
+   const [email, setEmail] = useState('')
+   const [password, setPassword] = useState('')
+   const [repetirPassword, setRepetirPassword] = useState('')
+
+
+
    return (
       <>
          <h1 className="text-sky-600 font-black text-5xl capitalize">Crea tu Cuenta y Administra tus {' '}
@@ -20,6 +30,8 @@ const Registrar = () => {
                   type="nombre"
                   placeholder="Tu Nombre"
                   id="nombre"
+                  value={ nombre }
+                  onChange={ e => setNombre(e.target.value) }
                />
             </div>
 
@@ -33,6 +45,8 @@ const Registrar = () => {
                   type="email"
                   placeholder="Email de Registro"
                   id="email"
+                  value={ email }
+                  onChange={ e => setEmail(e.target.value) }
                />
             </div>
 
@@ -46,6 +60,8 @@ const Registrar = () => {
                   type="password"
                   placeholder="Password de Registro"
                   id="password"
+                  value={ password }
+                  onChange={ e => setPassword(e.target.value) }
                />
             </div>
 
@@ -59,6 +75,8 @@ const Registrar = () => {
                   type="password"
                   placeholder="Repetir Password"
                   id="password2"
+                  value={ repetirPassword }
+                  onChange={ e => setRepetirPassword(e.target.value) }
                />
             </div>
 
