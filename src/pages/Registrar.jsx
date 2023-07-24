@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
+
+import Alerta from '../components/Alerta'
 
 
 const Registrar = () => {
@@ -9,8 +12,59 @@ const Registrar = () => {
    const [email, setEmail] = useState('')
    const [password, setPassword] = useState('')
    const [repetirPassword, setRepetirPassword] = useState('')
+   const [alerta, setAlerta] = useState({})
 
+   //! methos for events
+   const handleSubmit = async e => {
+      e.preventDefault()
 
+      // validamos que todos los campos tiene informacion
+      if([nombre, email, password, repetirPassword].includes('')) {
+         setAlerta({
+            msg: 'Todos los campos son obligatorios',
+            error: true,
+         })
+         return
+      }
+
+      // validamos que los password sean iguales
+      if(password !== repetirPassword){
+         setAlerta({
+            msg: 'Los Password no son iguales',
+            error: true,
+         })
+         return
+      }
+
+      // validamos que el password tenga al menos 6 caracteres
+      if(password.length < 6){
+         setAlerta({
+            msg: 'El Password es muy corto, deb ser de almenos 6 caracteres',
+            error: true,
+         })
+         return
+      }
+
+      // si pasa todas las validaciones seteamso la alerta y creamos el usuario con la API
+      setAlerta({})
+
+      //TODO crear el usuario
+      try {
+         const respuesta = await axios.post('http://localhost:4000/usuarios', {
+         nombre,
+         email,
+         password,
+      })
+         console.log(respuesta)
+         
+      } catch (error) {
+         console.log(error)
+      }
+      
+   }
+
+   // extraemos el mensaje d ela alerta
+   const { msg } = alerta;
 
    return (
       <>
@@ -18,7 +72,12 @@ const Registrar = () => {
             <span className="text-slate-700">Proyectos</span>
          </h1>
 
-         <form className="my-10 bg-white shadow rounded-lg p-10">
+         {msg && <Alerta alerta={alerta} />}
+
+         <form 
+            className="my-10 bg-white shadow rounded-lg p-10"      
+            onSubmit={ handleSubmit }
+         >
 
             <div className="my-5">
                <label 
