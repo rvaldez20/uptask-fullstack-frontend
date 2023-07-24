@@ -4,7 +4,7 @@ const Login = () => {
    return (
       <>
          <h1 className="text-sky-600 font-black text-6xl capitalize">Inicia sesión y administra tus {' '}
-            <span className="text-slate-700">proyectos</span>
+            <span className="text-slate-700">Proyectos</span>
          </h1>
 
          <form className="my-10 bg-white shadow rounded-lg p-10">
@@ -30,7 +30,7 @@ const Login = () => {
                   className="w-full mt-3 p-3 border rounded-lg bg-gray-50"
                   type="password"
                   placeholder="Password de Registro"
-                  id="Password"
+                  id="password"
                />
             </div>
 
