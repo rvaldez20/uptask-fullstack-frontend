@@ -50,15 +50,32 @@ const Registrar = () => {
 
       //TODO crear el usuario
       try {
-         const respuesta = await axios.post('http://localhost:4000/usuarios', {
-         nombre,
-         email,
-         password,
-      })
-         console.log(respuesta)
+         const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/usuarios`, { 
+            nombre, 
+            email, 
+            password 
+         })
          
+         setAlerta({
+            msg: data.msg,
+            error: false
+         })
+
+         // quiere decir que ya se creo el usuario y limpiamos el formulario
+         setNombre('')
+         setEmail('')
+         setPassword('')
+         setRepetirPassword('')
+
       } catch (error) {
-         console.log(error)
+         // console.log(error.response.data.msg) // mensaje de error del controlador del backend
+         setAlerta({
+            msg: error.response.data.msg,
+            error: true
+         })
+
+         setPassword('')
+         setRepetirPassword('')
       }
       
    }

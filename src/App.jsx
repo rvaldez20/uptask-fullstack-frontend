@@ -7,6 +7,8 @@ import OlvidePassword from './pages/OlvidePassword'
 import NuevoPassword from './pages/NuevoPassword'
 import ConfirmarCuenta from './pages/ConfirmarCuenta'
 
+// console.log(import.meta.env.VITE_BACKEND_URL) // acceso a las variables de entorno en VITE
+
 function App() {
 
   return (
