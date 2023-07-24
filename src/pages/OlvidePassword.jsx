@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const OlvidePassword = () => {
    return (
       <>
-         <h1 className="text-sky-600 font-black text-6xl capitalize">Recupera tu Acceso y no pierdas tus {' '}
+         <h1 className="text-sky-600 font-black text-5xl capitalize">Recupera tu Acceso y no pierdas tus {' '}
             <span className="text-slate-700">Proyectos</span>
          </h1>
 

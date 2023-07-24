@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const Registrar = () => {
    return (
       <>
-         <h1 className="text-sky-600 font-black text-6xl capitalize">Crea tu Cuenta y Administra tus {' '}
+         <h1 className="text-sky-600 font-black text-5xl capitalize">Crea tu Cuenta y Administra tus {' '}
             <span className="text-slate-700">Proyectos</span>
          </h1>
 
