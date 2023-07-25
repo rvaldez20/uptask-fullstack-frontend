@@ -20,7 +20,7 @@ const ConfirmarCuenta = () => {
          try {
             const url = `http://localhost:4000/api/usuarios/confirmar/${id}`;
             const { data } = await axios.get(url)
-            console.log(data)
+            // console.log(data)
 
             setAlerta({
                msg: data.msg,
