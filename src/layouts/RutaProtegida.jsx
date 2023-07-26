@@ -1,15 +1,18 @@
 import { Outlet, Navigate } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
+import Proyectos from '../pages/Proyectos';
 
 
 const RutaProtegida = () => {
 
-   const { auth } = useAuth();
-   console.log(auth)
+   const { auth, cargando } = useAuth();
+ 
+   // console.log(auth)
+   // if(cargando) return 'Cargando....'
 
    return (
       <>
-         { auth._id ? 'Authenticado' : <Navigate to="/" />}
+         { auth._id ? <Outlet /> : <Navigate to="/" />}
       </>
    )
 }

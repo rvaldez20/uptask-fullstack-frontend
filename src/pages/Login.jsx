@@ -15,6 +15,8 @@ const Login = () => {
    // obtenemos el context
    const { setAuth } = useAuth();
    
+   // console.log(auth)
+   // console.log(cargando)
 
    const handleSubmit = async(e) => {
       e.preventDefault();
