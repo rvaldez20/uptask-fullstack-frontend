@@ -9,6 +9,8 @@ const NuevoPassword = () => {
    //states
    const [alerta, setAlerta] = useState({})
    const [tokenValido, setTokenValido] = useState(false)
+   const [password, setPassword] = useState('')
+   const [passwordModificado, setPasswordModificado] = useState(false)
 
    const params = useParams();
    const {token} = params
@@ -29,6 +31,39 @@ const NuevoPassword = () => {
       comprobarToken()
    }, [])
 
+   const handleSubmit = async(e) => {
+      e.preventDefault();
+
+      if(password.length < 6) {
+         setAlerta({
+            msg: 'El Password debe ser de almenos 6 caracteres',
+            error: true
+         })
+         return
+      }
+
+      try {
+         const url = `${import.meta.env.VITE_BACKEND_URL}/api/usuarios/olvide-password/${token}`;
+         const { data } = await axios.post(url, {password})
+
+         setPassword('');
+         setTokenValido(false)
+         setPasswordModificado(true);
+
+         setAlerta({
+            msg: data.msg,
+            error: false
+         })
+         return
+
+      } catch (error) {
+         setAlerta({
+            msg: error.response.data.msg,
+            error: true
+         })
+      }
+   }
+
    const { msg } = alerta;
 
    return (
@@ -40,7 +75,10 @@ const NuevoPassword = () => {
          { msg && <Alerta alerta={alerta} />}
 
          { tokenValido && (
-            <form className="my-10 bg-white shadow rounded-lg p-10">                        
+            <form 
+               onSubmit={ handleSubmit }
+               className="my-10 bg-white shadow rounded-lg p-10"
+            >                        
                <div className="my-5">
                   <label 
                      className="uppercase text-gray-600 block text-xl font-bold"                   
@@ -51,6 +89,8 @@ const NuevoPassword = () => {
                      type="password"
                      placeholder="Escribe tu Nuevo Password"
                      id="password"
+                     value={password}
+                     onChange={e => setPassword(e.target.value)}
                   />
                </div>          
 
@@ -60,6 +100,13 @@ const NuevoPassword = () => {
                   className="bg-sky-700 mb-5 w-full py-3 text-white uppercase font-bold rounded hover:cursor-pointer hover:bg-sky-800 transition-colors"
                />
             </form>   
+         )}
+
+         { passwordModificado && (
+            <Link
+               className='block text-center my-3 text-slate-500 uppercase text-sm'
+               to="/"
+            >Inicia Sesión</Link>
          )}
         
       </>
