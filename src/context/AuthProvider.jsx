@@ -4,7 +4,7 @@ import clienteAxios from '../config/clienteAxios';
 
 const AuthContext = createContext();
 
-const AuthProvider = ({children}) => {
+const AuthProvider = ({ children }) => {
 
    const [auth, setAuth] = useState({});
 
@@ -43,8 +43,8 @@ const AuthProvider = ({children}) => {
    return (
       <AuthContext.Provider 
          value={{
-            setAuth
-                        
+            auth,
+            setAuth,                        
          }}
       >
          {children}
