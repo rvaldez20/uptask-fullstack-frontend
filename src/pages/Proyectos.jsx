@@ -1,4 +1,4 @@
-import useProyectos from "../hooks/useProyecto"
+import useProyectos from "../hooks/useProyectos"
 
 const Proyectos = () => {
 
