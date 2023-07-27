@@ -1,6 +1,11 @@
 import { Outlet, Navigate } from 'react-router-dom'
+
+
 import useAuth from '../hooks/useAuth'
 import Proyectos from '../pages/Proyectos';
+import Header from '../components/Header';
+import Sidebar from '../components/Sidebar';
+
 
 
 const RutaProtegida = () => {
@@ -12,7 +17,20 @@ const RutaProtegida = () => {
 
    return (
       <>
-         { auth._id ? <Outlet /> : <Navigate to="/" />}
+         { auth._id ? 
+         (
+            <div className="bg-gray-300">
+               <Header />
+
+               <div className="md:flex md:min-h-screen">
+                  <Sidebar />
+
+                  <main className="p-10 flex-1">
+                     <Outlet />
+                  </main>
+               </div>
+            </div>
+         ) : <Navigate to="/" />}
       </>
    )
 }
