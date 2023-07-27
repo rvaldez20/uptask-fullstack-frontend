@@ -11,6 +11,38 @@ const ProyectosProvider = ({children}) => {
 
    const navigate = useNavigate();
 
+   useEffect(() => {
+      const obtenerProyectos = async() => {
+         try {
+            //obtenemos el token
+            const token = localStorage.getItem('token');
+
+            // se valida que exista un token         
+            if(!token) return
+
+
+            // objeto de configuracion de los header 
+            const config = {
+               headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`
+               }
+            }
+
+            // hacemos el request para obtener los proyectos
+            const { data } = await clienteAxios.get('/proyectos', config)
+            
+            // agregamos los proyectos al state
+            setProyectos(data)
+
+         } catch (error) {
+            console.log(error)
+         }
+      }
+      obtenerProyectos();
+   }, [])
+   
+
    // funcion para el manejo de alertas
    const mostrarAlerta = alerta => {
       setAlerta(alerta)
@@ -32,7 +64,7 @@ const ProyectosProvider = ({children}) => {
          if(!token) return
 
          // objeto de configuracion de los header 
-         const configAuth = {
+         const config = {
             headers: {
                "Content-Type": "application/json",
                Authorization: `Bearer ${token}`
@@ -40,8 +72,12 @@ const ProyectosProvider = ({children}) => {
          }
 
          // hacemos el request para guardar el proyecto
-         const { data } = await clienteAxios.post('/proyectos', proyecto, configAuth)         
-         console.log(data)
+         const { data } = await clienteAxios.post('/proyectos', proyecto, config)         
+         // console.log("PROYECTOS:",proyectos)
+         // console.log("DATA",data)
+
+         // actualizamos los proyectos  con el que se acaba de dar de alta(data)         
+         setProyectos([...proyectos, data])
 
          setAlerta({
             msg: 'Proyecto Creado Correctamente',
