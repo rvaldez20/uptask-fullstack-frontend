@@ -180,8 +180,49 @@ const ProyectosProvider = ({children}) => {
          console.log(error)
       } finally {
          setCargando(false)
+      }   
+   }
+
+   const eliminarProyecto = async (id) => {
+      try {
+         //obtenemos el token
+         const token = localStorage.getItem('token');
+
+         // se valida que exista un token         
+         if(!token) return
+
+         // objeto de configuracion de los header 
+         const config = {
+            headers: {
+               "Content-Type": "application/json",
+               Authorization: `Bearer ${token}`
+            }
+         }
+
+         // hacemos el request para guardar el proyecto
+         const { data } = await clienteAxios.delete(`/proyectos/${id}`, config)
+         console.log(data)
+
+         // sincronizar el state (
+         const proyectosActualizados = proyectos.filter(proyectoState => proyectoState._id !== id)
+         setProyectos(proyectosActualizados)
+         //console.log(proyectosActualizados)
+         
+         
+
+         setAlerta({
+            msg: data.msg,
+            error: false,
+         })
+         
+         setTimeout(() => {
+            setAlerta({})
+            navigate('/proyectos')
+         }, 2000);
+         
+      } catch (error) {        
+         console.log(error.response)
       }
-   
    }
 
 
@@ -195,6 +236,7 @@ const ProyectosProvider = ({children}) => {
             obtenerProyecto,
             proyecto,
             cargando,
+            eliminarProyecto,
          }}
       >
          {children}
