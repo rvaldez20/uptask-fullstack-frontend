@@ -58,8 +58,58 @@ const ProyectosProvider = ({children}) => {
 
    // hace submit y grada un nuevo proyecto
    const submitProyecto = async (proyecto) => {
-      try {
+      if(proyecto.id) {
+         await editarProyecto(proyecto)
+      } else {
+         await nuevoProyecto(proyecto)
+      }      
+   }
+
+   // funcion para submit que edita un proyecto
+   const editarProyecto = async (proyecto) => {
+      try {         
+         //obtenemos el token
+         const token = localStorage.getItem('token');
+
+         // se valida que exista un token         
+         if(!token) return
+
+         // objeto de configuracion de los header 
+         const config = {
+            headers: {
+               "Content-Type": "application/json",
+               Authorization: `Bearer ${token}`
+            }
+         }
+
+         // hacemos el request para guardar el proyecto
+         const { data } = await clienteAxios.put(`/proyectos/${proyecto.id}`, proyecto, config)
+         console.log(data)
          
+         // sincronizar el state (actualizamos unicamente el registro que cambio)
+         const proyectosActualizados = proyectos.map(proyectoState => proyectoState._id === data._id ? data : proyectoState)
+         setProyectos(proyectosActualizados)
+         // console.log(proyectosActualizados)
+
+
+         setAlerta({
+            msg: 'Proyecto Actualizado Correctamente',
+            error: false,
+         })
+
+         setTimeout(() => {
+            setAlerta({})
+            navigate('/proyectos')
+         }, 2000);
+
+      } catch (error) {
+         console.log(error)
+      }
+   }
+
+   // funcion para submit d eun nuevo proyecto
+   const nuevoProyecto = async (proyecto) => {
+      try {         
          //obtenemos el token
          const token = localStorage.getItem('token');
 
@@ -96,6 +146,7 @@ const ProyectosProvider = ({children}) => {
          console.log(error)
       }
    }
+
 
    // funcion para obtenerProyecto por ID
    const obtenerProyecto = async (id) => {

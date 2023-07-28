@@ -1,16 +1,35 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 
 import Alerta from '../components/Alerta'
 import useProyectos from '../hooks/useProyectos'
 
 const FormularioProyecto = () => {
    // States
+   const [id, setId] = useState(null)
    const [nombre, setNombre] = useState('')
    const [descripcion, setDescripcion] = useState('')
    const [fechaEntrega, setFechaEntrega] = useState('')
    const [cliente, setCliente] = useState('')
 
-   const {mostrarAlerta, alerta, submitProyecto} = useProyectos();
+   // con el params vamos a identificar si estamos creando o editando
+   // si hay id->editando | no id.->creando
+   const params = useParams();
+   
+   const {mostrarAlerta, alerta, submitProyecto, proyecto} = useProyectos();
+   
+   useEffect(() => {
+      // console.log(params)
+      if(params.id) {
+         setId(proyecto._id)
+         setNombre(proyecto.nombre)
+         setDescripcion(proyecto.descripcion)
+         setFechaEntrega(proyecto.fechaEntrega?.split('T')[0])  // tomamos solo la fecha
+         setCliente(proyecto.cliente)
+         // console.log(proyecto.fechaEntrega.split('T'))
+      }
+   }, [params])
+
 
    const handleSubmit = async(e) => {
       e.preventDefault();
@@ -24,15 +43,16 @@ const FormularioProyecto = () => {
       }
 
       // pasar los datos hacia el provider(el proyecto)
-      await submitProyecto({ nombre, descripcion, fechaEntrega, cliente });
+      await submitProyecto({ id, nombre, descripcion, fechaEntrega, cliente });
 
       // reseteamos el formulario
+      setId(null)
       setNombre('')
       setDescripcion('')
       setFechaEntrega('')
       setCliente('')      
    }
-
+   
    const { msg } = alerta;
 
    return (
@@ -105,7 +125,7 @@ const FormularioProyecto = () => {
 
          <input 
             type="submit" 
-            value="Crear Proyecto"
+            value={id ? 'Actualizar Proyecto' : 'Crear Proyecto'}
             className='bg-sky-600 p-3 text-white w-full uppercase font-bold rounded cursor-pointer hover:bg-sky-700 transition-colors'
          />
          
