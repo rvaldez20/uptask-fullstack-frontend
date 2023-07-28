@@ -8,6 +8,9 @@ const ProyectosProvider = ({children}) => {
    // states
    const [proyectos, setProyectos] = useState([])
    const [alerta, setAlerta] = useState({})
+   const [proyecto, setProyecto] = useState({})
+   const [cargando, setCargando] = useState(false)
+
 
    const navigate = useNavigate();
 
@@ -96,6 +99,9 @@ const ProyectosProvider = ({children}) => {
 
    // funcion para obtenerProyecto por ID
    const obtenerProyecto = async (id) => {
+
+      // cargando lo ponemos en true cuandos e va obtener el proyecto
+      setCargando(true)
       
       try {
          //obtenemos el token
@@ -114,10 +120,15 @@ const ProyectosProvider = ({children}) => {
 
          // hacemos el request para obtener los proyectos
          const { data } = await clienteAxios.get(`/proyectos/${id}`, config);
-         console.log(data)
+         // console.log(data)
+
+         // colocamos el proyecto en el state
+         setProyecto(data)
          
       } catch (error) {
          console.log(error)
+      } finally {
+         setCargando(false)
       }
    
    }
@@ -131,6 +142,8 @@ const ProyectosProvider = ({children}) => {
             alerta,
             submitProyecto,
             obtenerProyecto,
+            proyecto,
+            cargando,
          }}
       >
          {children}

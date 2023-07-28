@@ -7,7 +7,7 @@ const Proyecto = () => {
    const params = useParams();
    
 
-   const { obtenerProyecto } = useProyectos();      
+   const { obtenerProyecto, proyecto, cargando } = useProyectos();         
 
    useEffect(() => {
       // usamos el hook para tener acceso a la funcion obtenerProyecto
@@ -15,9 +15,19 @@ const Proyecto = () => {
 
    }, [])
 
+   console.log(proyecto)
+   const { nombre } = proyecto
 
-   return (
-      <div>Proyecto</div>
+
+   return ( 
+
+      cargando ? '...' : (
+         <div>
+            <h1 className="font-black text-4xl">{nombre}</h1>
+         </div>   
+      )
+
+      
    )
 }
 
