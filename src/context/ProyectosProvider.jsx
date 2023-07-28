@@ -53,7 +53,7 @@ const ProyectosProvider = ({children}) => {
       }, 5000);
    }
 
-   // 
+   // hace submit y grada un nuevo proyecto
    const submitProyecto = async (proyecto) => {
       try {
          
@@ -94,6 +94,35 @@ const ProyectosProvider = ({children}) => {
       }
    }
 
+   // funcion para obtenerProyecto por ID
+   const obtenerProyecto = async (id) => {
+      
+      try {
+         //obtenemos el token
+         const token = localStorage.getItem('token');
+
+         // se valida que exista un token         
+         if(!token) return
+
+         // objeto de configuracion de los header 
+         const config = {
+            headers: {
+               "Content-Type": "application/json",
+               Authorization: `Bearer ${token}`
+            }
+         }
+
+         // hacemos el request para obtener los proyectos
+         const { data } = await clienteAxios.get(`/proyectos/${id}`, config);
+         console.log(data)
+         
+      } catch (error) {
+         console.log(error)
+      }
+   
+   }
+
+
    return(
       <ProyectosContext.Provider
          value={{
@@ -101,6 +130,7 @@ const ProyectosProvider = ({children}) => {
             mostrarAlerta,
             alerta,
             submitProyecto,
+            obtenerProyecto,
          }}
       >
          {children}

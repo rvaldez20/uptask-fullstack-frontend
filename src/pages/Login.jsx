@@ -18,6 +18,8 @@ const Login = () => {
    // console.log(auth)
    // console.log(cargando)
 
+   const navigate = useNavigate()
+
    const handleSubmit = async(e) => {
       e.preventDefault();
 
@@ -42,6 +44,8 @@ const Login = () => {
 
          // guarda en context la data de la auth
          setAuth(data)
+
+         navigate('/proyectos')
          
       } catch (error) {
          setAlerta({
