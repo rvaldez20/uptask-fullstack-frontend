@@ -1,12 +1,16 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
+
 import useProyectos from '../hooks/useProyectos';
+import ModalFormularioTarea from '../components/ModalFormularioTarea';
 
 const Proyecto = () => {
+   //states
+   const [modal, setModal] = useState(false);
+
    // obenemos el id del pryecto que queremos visaulizar
    const params = useParams();
    
-
    const { obtenerProyecto, proyecto, cargando } = useProyectos();         
 
    useEffect(() => {
@@ -37,6 +41,7 @@ const Proyecto = () => {
          </div>    
 
          <button
+         onClick={ () => setModal(true) }
             type='button'
             className='text-sm px-5 py-3 w-full md:w-auto rounded-lg uppercase font-bold bg-sky-400 hover:bg-sky-500 text-white text-center mt-5 flex gap-2 transition-colors items-center justify-center'
          >
@@ -45,9 +50,12 @@ const Proyecto = () => {
             </svg>
             Nueva Tarea
          </button>
-   </>
 
-       
+         <ModalFormularioTarea 
+            modal={modal}
+            setModal={setModal}
+         />
+      </>       
    )
 }
 
