@@ -1,6 +1,7 @@
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import useProyectos from '../hooks/useProyectos'
+import Alerta from './Alerta'
 
 const PRIORIDAD = ["Baja", "Media", "Alta"]
 
@@ -11,11 +12,30 @@ const ModalFormularioTarea = () => {
     const[descripcion, setDescripcion] = useState('')
     const[prioridad, setPrioridad] = useState('')
     // const[fechaEntrega, setFechaEntrega] = useState('')
+    
 
 
     // para abrir y cerrar el modal
-    const { modalFormularioTarea, handleModalTarea } = useProyectos();
+    const { mostrarAlerta, alerta, modalFormularioTarea, handleModalTarea, submitTarea } = useProyectos();
+
+    // funcion para hace submit y enviar los datos de la nueva tarea
+    const  handleSubmit = e => {
+        e.preventDefault();
+
+        // validamos que no vayan campos vacios
+        if([nombre, descripcion, prioridad].includes('')) {
+            mostrarAlerta({
+                msg: 'Todos los campos son obligatorios',
+                error: true,
+            })         
+            return
+        }
+
+        submitTarea({ nombre, descripcion, prioridad})
+    }
  
+    const {msg} = alerta;
+
     return (
         <Transition.Root show={ modalFormularioTarea } as={Fragment}>
             <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" onClose={ handleModalTarea }>
@@ -71,7 +91,10 @@ const ModalFormularioTarea = () => {
                                         Crear Tarea
                                     </Dialog.Title>
 
+                                    { msg && <Alerta alerta={alerta} />}
+
                                     <form
+                                        onSubmit={ handleSubmit }
                                         className='my-10'
                                     >
                                         <div className="mb-5">
@@ -130,7 +153,6 @@ const ModalFormularioTarea = () => {
                                             className='bg-sky-600 hover:bg-sky-700 w-full p-3 text-white uppercase font-bold cursor-pointer rounded transition-colors text-sm'
                                             value="Crear Tarea"
                                         />
-
                                     </form>
                                     
                                     
