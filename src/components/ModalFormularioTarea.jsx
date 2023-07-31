@@ -10,8 +10,8 @@ const ModalFormularioTarea = () => {
     //states
     const[nombre, setNombre] = useState('')
     const[descripcion, setDescripcion] = useState('')
+    const[fechaEntrega, setFechaEntrega] = useState('')
     const[prioridad, setPrioridad] = useState('')
-    // const[fechaEntrega, setFechaEntrega] = useState('')
     
 
 
@@ -31,7 +31,7 @@ const ModalFormularioTarea = () => {
             return
         }
 
-        submitTarea({ nombre, descripcion, prioridad})
+        submitTarea({ nombre, descripcion, fechaEntrega, prioridad})
     }
  
     const {msg} = alerta;
@@ -126,6 +126,21 @@ const ModalFormularioTarea = () => {
                                                 className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'
                                                 value={descripcion}
                                                 onChange={ e => setDescripcion(e.target.value) }
+                                            />
+                                        </div>
+
+                                        <div className="mb-5">
+                                            <label 
+                                                htmlFor="fecha-entrega"
+                                                className='text-gray-700, uppercase font-bold text-sm'
+                                            >Fecha Entrega</label>
+
+                                            <input 
+                                                type="date"
+                                                id="fecha-entrega"
+                                                className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'
+                                                value={fechaEntrega}
+                                                onChange={ e => setFechaEntrega(e.target.value) }
                                             />
                                         </div>
 
