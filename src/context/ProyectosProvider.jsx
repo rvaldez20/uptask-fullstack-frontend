@@ -10,6 +10,7 @@ const ProyectosProvider = ({children}) => {
    const [alerta, setAlerta] = useState({})
    const [proyecto, setProyecto] = useState({})
    const [cargando, setCargando] = useState(false)
+   const [modalFormularioTarea, setModalFormularioTarea] = useState(false)
 
 
    const navigate = useNavigate();
@@ -225,6 +226,11 @@ const ProyectosProvider = ({children}) => {
       }
    }
 
+   // funcion para mostrar u ocultar el modal formulario tareas
+   const handleModalTarea = () => {
+      setModalFormularioTarea(!modalFormularioTarea);
+   }
+
 
    return(
       <ProyectosContext.Provider
@@ -237,6 +243,8 @@ const ProyectosProvider = ({children}) => {
             proyecto,
             cargando,
             eliminarProyecto,
+            modalFormularioTarea,
+            handleModalTarea,
          }}
       >
          {children}

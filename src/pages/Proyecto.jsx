@@ -11,7 +11,7 @@ const Proyecto = () => {
    // obenemos el id del pryecto que queremos visaulizar
    const params = useParams();
    
-   const { obtenerProyecto, proyecto, cargando } = useProyectos();         
+   const { obtenerProyecto, proyecto, cargando, handleModalTarea } = useProyectos();         
 
    useEffect(() => {
       // usamos el hook para tener acceso a la funcion obtenerProyecto
@@ -41,7 +41,7 @@ const Proyecto = () => {
          </div>    
 
          <button
-         onClick={ () => setModal(true) }
+         onClick={ handleModalTarea }
             type='button'
             className='text-sm px-5 py-3 w-full md:w-auto rounded-lg uppercase font-bold bg-sky-400 hover:bg-sky-500 text-white text-center mt-5 flex gap-2 transition-colors items-center justify-center'
          >
@@ -51,10 +51,7 @@ const Proyecto = () => {
             Nueva Tarea
          </button>
 
-         <ModalFormularioTarea 
-            modal={modal}
-            setModal={setModal}
-         />
+         <ModalFormularioTarea />
       </>       
    )
 }
