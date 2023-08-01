@@ -233,7 +233,40 @@ const ProyectosProvider = ({children}) => {
 
    
    const submitTarea = async (tarea) => {
-      console.log(tarea)
+      try {
+         //obtenemos el token
+         const token = localStorage.getItem('token');
+
+         // se valida que exista un token         
+         if(!token) return
+
+         // objeto de configuracion de los header 
+         const config = {
+            headers: {
+               "Content-Type": "application/json",
+               Authorization: `Bearer ${token}`
+            }
+         }
+
+         // hacemos el request para guardar l anueva tarea
+         const { data } = await clienteAxios.post('/tareas', tarea, config)  
+         console.log(data)
+
+         // actualizamos los proyectos  con el que se acaba de dar de alta(data)         
+         // setProyectos([...proyectos, data])
+
+         // setAlerta({
+         //    msg: 'Proyecto Creado Correctamente',
+         //    error: false,
+         // })
+
+         // setTimeout(() => {
+         //    setAlerta({})
+         //    navigate(`/proyectos/${proyecto}`)
+         // }, 3000);
+      } catch (error) {
+         console.log(error.response)
+      }
    }
 
 

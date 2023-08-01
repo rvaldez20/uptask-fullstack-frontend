@@ -1,4 +1,5 @@
 import { Fragment, useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import { Dialog, Transition } from '@headlessui/react'
 import useProyectos from '../hooks/useProyectos'
 import Alerta from './Alerta'
@@ -13,7 +14,7 @@ const ModalFormularioTarea = () => {
     const[fechaEntrega, setFechaEntrega] = useState('')
     const[prioridad, setPrioridad] = useState('')
     
-
+    const params = useParams();
 
     // para abrir y cerrar el modal
     const { mostrarAlerta, alerta, modalFormularioTarea, handleModalTarea, submitTarea } = useProyectos();
@@ -23,7 +24,7 @@ const ModalFormularioTarea = () => {
         e.preventDefault();
 
         // validamos que no vayan campos vacios
-        if([nombre, descripcion, prioridad].includes('')) {
+        if([nombre, descripcion, fechaEntrega, prioridad].includes('')) {
             mostrarAlerta({
                 msg: 'Todos los campos son obligatorios',
                 error: true,
@@ -31,7 +32,7 @@ const ModalFormularioTarea = () => {
             return
         }
 
-        submitTarea({ nombre, descripcion, fechaEntrega, prioridad})
+        submitTarea({ nombre, descripcion, fechaEntrega, prioridad, proyecto: params.id })
     }
  
     const {msg} = alerta;
