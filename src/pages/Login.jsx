@@ -45,9 +45,9 @@ const Login = () => {
          // guarda en context la data de la auth
          setAuth(data)
 
-         navigate('/proyectos')
-         
+         navigate('/proyectos')         
       } catch (error) {
+         console.log(error)
          setAlerta({
             msg: error.response.data.msg,
             error: true

@@ -10,6 +10,7 @@ const ProyectosProvider = ({children}) => {
    const [alerta, setAlerta] = useState({})
    const [proyecto, setProyecto] = useState({})
    const [cargando, setCargando] = useState(false)
+   const [modalFormularioTarea, setModalFormularioTarea] = useState(false)
 
 
    const navigate = useNavigate();
@@ -207,8 +208,7 @@ const ProyectosProvider = ({children}) => {
          const proyectosActualizados = proyectos.filter(proyectoState => proyectoState._id !== id)
          setProyectos(proyectosActualizados)
          //console.log(proyectosActualizados)
-         
-         
+                           
 
          setAlerta({
             msg: data.msg,
@@ -225,6 +225,45 @@ const ProyectosProvider = ({children}) => {
       }
    }
 
+   // funcion para mostrar u ocultar el modal formulario tareas
+   const handleModalTarea = () => {
+      setModalFormularioTarea(!modalFormularioTarea);
+   }
+
+   
+   const submitTarea = async (tarea) => {
+      try {
+         //obtenemos el token
+         const token = localStorage.getItem('token');
+
+         // se valida que exista un token         
+         if(!token) return
+
+         // objeto de configuracion de los header 
+         const config = {
+            headers: {
+               "Content-Type": "application/json",
+               Authorization: `Bearer ${token}`
+            }
+         }
+
+         // hacemos el request para guardar l anueva tarea
+         const { data } = await clienteAxios.post('/tareas', tarea, config)  
+         // console.log(data)
+
+         // actualizamos la tarea al state, la que se acaba de dar de alta(data)
+         const proyectoActualizado = { ...proyecto }
+         proyectoActualizado.tareas = [ ...proyecto.tareas, data]
+         setProyecto(proyectoActualizado)
+
+         setAlerta({})                       // limpiamos alertas
+         setModalFormularioTarea(false)      // cerrar el modal
+
+      } catch (error) {
+         console.log(error.response)
+      }
+   }
+
 
    return(
       <ProyectosContext.Provider
@@ -237,6 +276,9 @@ const ProyectosProvider = ({children}) => {
             proyecto,
             cargando,
             eliminarProyecto,
+            modalFormularioTarea,
+            handleModalTarea,
+            submitTarea
          }}
       >
          {children}
