@@ -230,6 +230,7 @@ const ProyectosProvider = ({children}) => {
    // funcion para mostrar u ocultar el modal formulario tareas
    const handleModalTarea = () => {
       setModalFormularioTarea(!modalFormularioTarea);
+      setTarea({})
    }
 
    
