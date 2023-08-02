@@ -11,6 +11,7 @@ const ProyectosProvider = ({children}) => {
    const [proyecto, setProyecto] = useState({})
    const [cargando, setCargando] = useState(false)
    const [modalFormularioTarea, setModalFormularioTarea] = useState(false)
+   const [tarea, setTarea] = useState({})
 
 
    const navigate = useNavigate();
@@ -184,6 +185,7 @@ const ProyectosProvider = ({children}) => {
       }   
    }
 
+   // funcion para eliminar un proyecto
    const eliminarProyecto = async (id) => {
       try {
          //obtenemos el token
@@ -231,6 +233,7 @@ const ProyectosProvider = ({children}) => {
    }
 
    
+   // funcion para agregar una nueva tarea a un proyecto
    const submitTarea = async (tarea) => {
       try {
          //obtenemos el token
@@ -264,6 +267,12 @@ const ProyectosProvider = ({children}) => {
       }
    }
 
+   //
+   const handleModalEditarTarea = tarea => {
+      setTarea(tarea)
+      setModalFormularioTarea(true)
+   }
+
 
    return(
       <ProyectosContext.Provider
@@ -278,7 +287,9 @@ const ProyectosProvider = ({children}) => {
             eliminarProyecto,
             modalFormularioTarea,
             handleModalTarea,
-            submitTarea
+            submitTarea,
+            handleModalEditarTarea,
+            tarea,
          }}
       >
          {children}
