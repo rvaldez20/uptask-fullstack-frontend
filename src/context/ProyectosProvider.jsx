@@ -208,8 +208,7 @@ const ProyectosProvider = ({children}) => {
          const proyectosActualizados = proyectos.filter(proyectoState => proyectoState._id !== id)
          setProyectos(proyectosActualizados)
          //console.log(proyectosActualizados)
-         
-         
+                           
 
          setAlerta({
             msg: data.msg,
@@ -250,20 +249,16 @@ const ProyectosProvider = ({children}) => {
 
          // hacemos el request para guardar l anueva tarea
          const { data } = await clienteAxios.post('/tareas', tarea, config)  
-         console.log(data)
+         // console.log(data)
 
-         // actualizamos los proyectos  con el que se acaba de dar de alta(data)         
-         // setProyectos([...proyectos, data])
+         // actualizamos la tarea al state, la que se acaba de dar de alta(data)
+         const proyectoActualizado = { ...proyecto }
+         proyectoActualizado.tareas = [ ...proyecto.tareas, data]
+         setProyecto(proyectoActualizado)
 
-         // setAlerta({
-         //    msg: 'Proyecto Creado Correctamente',
-         //    error: false,
-         // })
+         setAlerta({})                       // limpiamos alertas
+         setModalFormularioTarea(false)      // cerrar el modal
 
-         // setTimeout(() => {
-         //    setAlerta({})
-         //    navigate(`/proyectos/${proyecto}`)
-         // }, 3000);
       } catch (error) {
          console.log(error.response)
       }

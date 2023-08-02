@@ -20,7 +20,7 @@ const ModalFormularioTarea = () => {
     const { mostrarAlerta, alerta, modalFormularioTarea, handleModalTarea, submitTarea } = useProyectos();
 
     // funcion para hace submit y enviar los datos de la nueva tarea
-    const  handleSubmit = e => {
+    const  handleSubmit = async e => {
         e.preventDefault();
 
         // validamos que no vayan campos vacios
@@ -32,7 +32,14 @@ const ModalFormularioTarea = () => {
             return
         }
 
-        submitTarea({ nombre, descripcion, fechaEntrega, prioridad, proyecto: params.id })
+        // que espere hasta que agregue la tarea a la base de datos
+        await submitTarea({ nombre, descripcion, fechaEntrega, prioridad, proyecto: params.id })
+
+        // limpiamos el formulario
+        setNombre('')
+        setDescripcion('')
+        setFechaEntrega('')
+        setPrioridad('')
     }
  
     const {msg} = alerta;
