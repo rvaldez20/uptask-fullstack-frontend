@@ -14,10 +14,15 @@ const ModalFormularioTarea = () => {
     const[fechaEntrega, setFechaEntrega] = useState('')
     const[prioridad, setPrioridad] = useState('')
     
-    const params = useParams();
+    const params = useParams();    
 
     // para abrir y cerrar el modal
-    const { mostrarAlerta, alerta, modalFormularioTarea, handleModalTarea, submitTarea } = useProyectos();
+    const { mostrarAlerta, alerta, modalFormularioTarea, handleModalTarea, submitTarea, tarea } = useProyectos();
+
+    // usamos el useEffect 
+    useEffect(() => {
+        console.log(tarea)
+    }, [tarea]);
 
     // funcion para hace submit y enviar los datos de la nueva tarea
     const  handleSubmit = async e => {

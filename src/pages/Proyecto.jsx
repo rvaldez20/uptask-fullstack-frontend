@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 
 import useProyectos from '../hooks/useProyectos';
@@ -7,7 +7,7 @@ import Tarea from '../components/Tarea';
 
 const Proyecto = () => {
    //states
-   const [modal, setModal] = useState(false);
+   
 
    // obenemos el id del pryecto que queremos visaulizar
    const params = useParams();
