@@ -55,9 +55,10 @@ const ModalFormularioTarea = () => {
         }
 
         // que espere hasta que agregue la tarea a la base de datos
-        await submitTarea({ nombre, descripcion, fechaEntrega, prioridad, proyecto: params.id })
+        await submitTarea({ id, nombre, descripcion, fechaEntrega, prioridad, proyecto: params.id })
 
         // limpiamos el formulario
+        setId('')
         setNombre('')
         setDescripcion('')
         setFechaEntrega('')
