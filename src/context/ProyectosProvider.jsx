@@ -12,6 +12,7 @@ const ProyectosProvider = ({children}) => {
    const [cargando, setCargando] = useState(false)
    const [modalFormularioTarea, setModalFormularioTarea] = useState(false)
    const [tarea, setTarea] = useState({})
+   const [modalEliminarTarea, setModalEliminarTarea] = useState(false)
 
 
    const navigate = useNavigate();
@@ -322,6 +323,12 @@ const ProyectosProvider = ({children}) => {
       setModalFormularioTarea(true)
    }
 
+   // funcion para pasar la tarea y mostrar el modal para cnfirmar eliminar la tarea
+   const handleModalEliminarTarea = tarea => {      
+      setTarea(tarea)
+      setModalEliminarTarea(!modalEliminarTarea)
+   }
+
 
    return(
       <ProyectosContext.Provider
@@ -339,6 +346,8 @@ const ProyectosProvider = ({children}) => {
             submitTarea,
             handleModalEditarTarea,
             tarea,
+            modalEliminarTarea,
+            handleModalEliminarTarea,
          }}
       >
          {children}
