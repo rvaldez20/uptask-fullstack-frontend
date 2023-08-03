@@ -79,7 +79,7 @@ const Proyecto = () => {
             <p className='font-bold text-xl'>Colaboradores</p>
 
             <Link
-               to={`/poryectos/nuevo-colaborador/${proyecto._id}`}
+               to={`/proyectos/nuevo-colaborador/${proyecto._id}`}
                className='text-gray-500 uppercase font-bold flex gap-2 hover:text-black'
             >  
                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
