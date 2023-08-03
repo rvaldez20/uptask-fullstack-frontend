@@ -9,15 +9,37 @@ const PRIORIDAD = ["Baja", "Media", "Alta"]
 
 const ModalFormularioTarea = () => {
     //states
+    const [id, setId] = useState('')
     const[nombre, setNombre] = useState('')
     const[descripcion, setDescripcion] = useState('')
     const[fechaEntrega, setFechaEntrega] = useState('')
     const[prioridad, setPrioridad] = useState('')
     
-    const params = useParams();
+    const params = useParams();    
 
     // para abrir y cerrar el modal
-    const { mostrarAlerta, alerta, modalFormularioTarea, handleModalTarea, submitTarea } = useProyectos();
+    const { mostrarAlerta, alerta, modalFormularioTarea, handleModalTarea, submitTarea, tarea } = useProyectos();
+
+    // usamos el useEffect 
+    useEffect(() => {
+        if(tarea?._id) {
+            // llenamos los campos  en el modal
+            setId(tarea._id)
+            setNombre(tarea.nombre)
+            setDescripcion(tarea.descripcion)
+            setFechaEntrega(tarea.fechaEntrega?.split('T')[0])
+            setPrioridad(tarea.prioridad)
+            return
+        }
+
+        // limpiamos el formulario
+        setId('')
+        setNombre('')
+        setDescripcion('')
+        setFechaEntrega('')
+        setPrioridad('')
+
+    }, [tarea]);
 
     // funcion para hace submit y enviar los datos de la nueva tarea
     const  handleSubmit = async e => {
@@ -33,9 +55,10 @@ const ModalFormularioTarea = () => {
         }
 
         // que espere hasta que agregue la tarea a la base de datos
-        await submitTarea({ nombre, descripcion, fechaEntrega, prioridad, proyecto: params.id })
+        await submitTarea({ id, nombre, descripcion, fechaEntrega, prioridad, proyecto: params.id })
 
         // limpiamos el formulario
+        setId('')
         setNombre('')
         setDescripcion('')
         setFechaEntrega('')
@@ -95,8 +118,8 @@ const ModalFormularioTarea = () => {
 
                             <div className="sm:flex sm:items-start">
                                 <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                                    <Dialog.Title as="h3" className="text-lg leading-6 font-bold text-gray-900">
-                                        Crear Tarea
+                                    <Dialog.Title as="h3" className="text-2xl text-sky-900 leading-6 font-bold ">
+                                        { id ? 'Editar tarea' : 'Crear Tarea'}
                                     </Dialog.Title>
 
                                     { msg && <Alerta alerta={alerta} />}
@@ -174,7 +197,8 @@ const ModalFormularioTarea = () => {
                                         <input 
                                             type="submit"
                                             className='bg-sky-600 hover:bg-sky-700 w-full p-3 text-white uppercase font-bold cursor-pointer rounded transition-colors text-sm'
-                                            value="Crear Tarea"
+                                            value={ id ? 'Guardar Cambios' : 'Crear Tarea'}
+
                                         />
                                     </form>
                                     

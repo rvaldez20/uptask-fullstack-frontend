@@ -11,6 +11,7 @@ const ProyectosProvider = ({children}) => {
    const [proyecto, setProyecto] = useState({})
    const [cargando, setCargando] = useState(false)
    const [modalFormularioTarea, setModalFormularioTarea] = useState(false)
+   const [tarea, setTarea] = useState({})
 
 
    const navigate = useNavigate();
@@ -184,6 +185,7 @@ const ProyectosProvider = ({children}) => {
       }   
    }
 
+   // funcion para eliminar un proyecto
    const eliminarProyecto = async (id) => {
       try {
          //obtenemos el token
@@ -228,10 +230,24 @@ const ProyectosProvider = ({children}) => {
    // funcion para mostrar u ocultar el modal formulario tareas
    const handleModalTarea = () => {
       setModalFormularioTarea(!modalFormularioTarea);
+      setTarea({})
    }
 
    
+   // funcion para agregar una nueva tarea a un proyecto
    const submitTarea = async (tarea) => {
+
+      if(tarea?.id) {
+         // si tenemos un id en la tarea quiere decir que vamos a editar la tarea
+         await editarTarea(tarea)
+      } else {
+         // si no tenemos un id en l atarea quiere decir que vamos a crear la tarea
+         await crearTarea(tarea)
+      }      
+   }
+
+   // funcion para crear una tarea nueva
+   const crearTarea = async tarea => {
       try {
          //obtenemos el token
          const token = localStorage.getItem('token');
@@ -263,6 +279,48 @@ const ProyectosProvider = ({children}) => {
          console.log(error.response)
       }
    }
+   
+   // funcion para editar una tarea
+   const editarTarea = async tarea => {
+      try {
+         //obtenemos el token
+         const token = localStorage.getItem('token');
+
+         // se valida que exista un token         
+         if(!token) return
+
+         // objeto de configuracion de los header 
+         const config = {
+            headers: {
+               "Content-Type": "application/json",
+               Authorization: `Bearer ${token}`
+            }
+         }
+
+         // hacemos el request para guardar l anueva tarea
+         const { data } = await clienteAxios.put(`/tareas/${tarea.id}`, tarea, config)  
+         console.log(data)
+         
+
+         // actualizamos la tarea actualizada en el state, la que se acaba de editar (data)
+         const proyectoActualizado = { ...proyecto }
+         proyectoActualizado.tareas = proyectoActualizado.tareas.map( tareaState => tareaState._id === data._id ? data : tareaState )
+         setProyecto(proyectoActualizado)
+
+         setAlerta({})                       // limpiamos alertas
+         setModalFormularioTarea(false)      // cerrar el modal
+
+      } catch (error) {
+         console.log(error.response)
+      }
+   }
+
+
+   // fruncion para colocar la tarea en el state y mostrar el modal
+   const handleModalEditarTarea = tarea => {
+      setTarea(tarea)
+      setModalFormularioTarea(true)
+   }
 
 
    return(
@@ -278,7 +336,9 @@ const ProyectosProvider = ({children}) => {
             eliminarProyecto,
             modalFormularioTarea,
             handleModalTarea,
-            submitTarea
+            submitTarea,
+            handleModalEditarTarea,
+            tarea,
          }}
       >
          {children}
