@@ -13,6 +13,7 @@ const ProyectosProvider = ({children}) => {
    const [modalFormularioTarea, setModalFormularioTarea] = useState(false)
    const [tarea, setTarea] = useState({})
    const [modalEliminarTarea, setModalEliminarTarea] = useState(false)
+   const [colaborador, setColaborador] = useState({})
 
 
    const navigate = useNavigate();
@@ -369,7 +370,39 @@ const ProyectosProvider = ({children}) => {
    }
 
    const submitColaborador = async email => {
-      console.log(email)
+      // habilitamnos el cargando
+      setCargando(true)
+
+      try {
+         //obtenemos el token
+         const token = localStorage.getItem('token');
+
+         // se valida que exista un token         
+         if(!token) return
+
+         // objeto de configuracion de los header 
+         const config = {
+            headers: {
+               "Content-Type": "application/json",
+               Authorization: `Bearer ${token}`
+            }
+         }
+
+         // hacemos la peticion para enviar el email
+         const { data } = await clienteAxios.post('/proyectos/colaboradores', { email }, config);
+         
+         // en caso de encontralo lo guardamos en el state
+         setColaborador(data)
+         setAlerta({})
+
+      } catch (error) {
+         setAlerta({
+            msg: error.response.data.msg,
+            error: true,
+         })  
+      } finally {
+         setCargando(false)
+      }
    }
 
    return(
