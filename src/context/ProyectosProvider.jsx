@@ -426,12 +426,24 @@ const ProyectosProvider = ({children}) => {
 
          // hacemos el request para agregar al colaborador al proyecto
          // hacemos la peticion para enviar el email
-         const { data } = await clienteAxios.post(`/proyectos/colaboradores/${proyecto._id}`, { email }, config);
-         console.log(data.response)
+         const { data } = await clienteAxios.post(`/proyectos/colaboradores/${proyecto._id}`, email, config);
+         // console.log(data.response)
+
+         setAlerta({
+            msg: data.msg,
+            error: false,
+         })  
+
+         setColaborador({})
+         setAlerta({})
+         
 
 
       } catch (error) {
-         console.log(error.response)
+         setAlerta({
+            msg: error.response.data.msg,
+            error: true,
+         })  
       }
    }
 
