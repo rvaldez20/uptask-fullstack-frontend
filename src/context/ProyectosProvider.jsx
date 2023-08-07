@@ -181,7 +181,10 @@ const ProyectosProvider = ({children}) => {
          setProyecto(data)
          
       } catch (error) {
-         console.log(error)
+         setAlerta({
+            msg: error.response.data.msg,
+            error: true
+         })
       } finally {
          setCargando(false)
       }   
@@ -406,7 +409,30 @@ const ProyectosProvider = ({children}) => {
    }
 
    const agregarColaborador = async email => {
-      console.log(email)
+      try {
+         //obtenemos el token
+         const token = localStorage.getItem('token');
+
+         // se valida que exista un token         
+         if(!token) return
+
+         // objeto de configuracion de los header 
+         const config = {
+            headers: {
+               "Content-Type": "application/json",
+               Authorization: `Bearer ${token}`
+            }
+         }
+
+         // hacemos el request para agregar al colaborador al proyecto
+         // hacemos la peticion para enviar el email
+         const { data } = await clienteAxios.post(`/proyectos/colaboradores/${proyecto._id}`, { email }, config);
+         console.log(data.response)
+
+
+      } catch (error) {
+         console.log(error.response)
+      }
    }
 
    return(
