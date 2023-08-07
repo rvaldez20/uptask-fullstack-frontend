@@ -12,17 +12,18 @@ const AuthProvider = ({ children }) => {
 
    const navigate = useNavigate();
 
+   // se usa para comprobar que hay un token en el localstorage y hacer la autenticacion
    useEffect(() => {      
       const autenticarUsuario = async () => {
-         const token = localStorage.getItem('token')
+         const token = localStorage.getItem('token')         
          
          // verificamos si tenemos un token en localstorage
          if(!token) {
             setCargando(false);
             return;
-         }
+         }         
 
-         const configAuth = {
+         const config = {
             headers: {
                "Content-Type": "application/json",
                Authorization: `Bearer ${token}`
@@ -31,21 +32,18 @@ const AuthProvider = ({ children }) => {
 
          try {
             // hacemos el request a la API end-point perfil y obtenemos la info del usuario
-            const { data } = await clienteAxios.get('/usuarios/perfil', configAuth)
+            const { data } = await clienteAxios.get('/usuarios/perfil', config)            
 
             // colocamos la respuesta en el state auth
             setAuth(data)
 
             // redireccionamos a /proyectos
-            navigate('/proyectos')
-
+            // navigate('/proyectos')
          } catch (error) {
-            setAuth({})
-         } 
-
-         setCargando(false);  
-
-         
+            // setAuth({})
+         } finally {
+            setCargando(false);           
+         }         
       }
       autenticarUsuario();
    }, [])

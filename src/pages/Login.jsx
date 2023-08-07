@@ -13,7 +13,7 @@ const Login = () => {
    const [alerta, setAlerta] = useState({})
 
    // obtenemos el context
-   const { setAuth } = useAuth();
+   const { setAuth, auth, cargando } = useAuth();
    
    // console.log(auth)
    // console.log(cargando)
@@ -47,13 +47,12 @@ const Login = () => {
 
          navigate('/proyectos')         
       } catch (error) {
-         console.log(error)
+         // console.log(error.response.data.msg)
          setAlerta({
             msg: error.response.data.msg,
             error: true
          })         
-      }
-      
+      }            
    }
 
    const { msg } = alerta;
