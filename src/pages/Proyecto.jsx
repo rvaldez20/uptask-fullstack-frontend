@@ -4,7 +4,9 @@ import { useParams, Link } from 'react-router-dom'
 import useProyectos from '../hooks/useProyectos';
 import ModalFormularioTarea from '../components/ModalFormularioTarea';
 import ModalEliminarTarea from '../components/ModalEliminarTarea';
+import ModalEliminarColaborador from '../components/ModalEliminarColaborador';
 import Tarea from '../components/Tarea';
+import Colaborador from '../components/Colaborador';
 import Alerta from '../components/Alerta';
 
 const Proyecto = () => {
@@ -24,6 +26,7 @@ const Proyecto = () => {
 
    // console.log(proyecto)
    const { nombre } = proyecto
+   // console.log(proyecto)
 
    if(cargando) return 'Cargando...'
 
@@ -91,8 +94,22 @@ const Proyecto = () => {
             </Link>
          </div>
 
+         {/* Listando colaboradores */}
+         <div className='bg-white shadow mt-10 rounded-lg'>
+            {proyecto.colaboradores?.length 
+               ? proyecto.colaboradores?.map( colaborador => (
+                     <Colaborador 
+                        key={colaborador._id} 
+                        colaborador={colaborador}
+                     />
+                  ))                 
+               : <p className='text-center text-xl my-10 p-10'>No hay Colaboradores en este Proyecto</p>}
+         </div>
+
+
          <ModalFormularioTarea />
          <ModalEliminarTarea />
+         <ModalEliminarColaborador />
       </>       
    )
 }

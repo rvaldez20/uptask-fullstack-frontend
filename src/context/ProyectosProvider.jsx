@@ -14,6 +14,7 @@ const ProyectosProvider = ({children}) => {
    const [tarea, setTarea] = useState({})
    const [modalEliminarTarea, setModalEliminarTarea] = useState(false)
    const [colaborador, setColaborador] = useState({})
+   const [modalEliminarColaborador, setModalEliminarColaborador] = useState(false)
 
 
    const navigate = useNavigate();
@@ -332,6 +333,7 @@ const ProyectosProvider = ({children}) => {
       setModalEliminarTarea(!modalEliminarTarea)
    }
 
+
    const eliminarTarea = async () => {
       try {
          //obtenemos el token
@@ -435,8 +437,6 @@ const ProyectosProvider = ({children}) => {
          })  
 
          setColaborador({})
-         setAlerta({})
-         
 
 
       } catch (error) {
@@ -444,6 +444,51 @@ const ProyectosProvider = ({children}) => {
             msg: error.response.data.msg,
             error: true,
          })  
+      }
+   }
+
+   // funcion para pasar el colaborador y mostrar el modal para cnfirmar eliminar el colaborador
+   const handleModalEliminarColaborador = (colaborador) => {
+      setModalEliminarColaborador(!modalEliminarColaborador)
+
+      setColaborador(colaborador)
+      // console.log(colaborador)
+   }
+
+   const eliminarColaborador = async() => {
+      try {
+         //obtenemos el token
+         const token = localStorage.getItem('token');
+
+         // se valida que exista un token         
+         if(!token) return
+
+         // objeto de configuracion de los header 
+         const config = {
+            headers: {
+               "Content-Type": "application/json",
+               Authorization: `Bearer ${token}`
+            }
+         }
+         
+         // hacemos la peticion para enviar el id 
+         const { data } = await clienteAxios.post(`/proyectos/eliminar-colaborador/${proyecto._id}`, {id: colaborador._id}, config);
+
+         // actualizamos el state y el dom
+         const proyectoActualizado = { ...proyecto }
+         proyectoActualizado.colaboradores = proyectoActualizado.colaboradores.filter(colaboradorState => colaboradorState._id !== colaborador._id)
+         setProyecto(proyectoActualizado)
+
+         setAlerta({
+            msg: data.msg,
+            error: false
+         })
+         setColaborador({})
+         setModalEliminarColaborador(false)
+
+
+      } catch (error) {
+         console.log(error.response)
       }
    }
 
@@ -469,6 +514,9 @@ const ProyectosProvider = ({children}) => {
             submitColaborador,
             colaborador,
             agregarColaborador,
+            modalEliminarColaborador,
+            handleModalEliminarColaborador,
+            eliminarColaborador,
          }}
       >
          {children}
