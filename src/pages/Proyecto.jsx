@@ -4,6 +4,7 @@ import { useParams, Link } from 'react-router-dom'
 import useProyectos from '../hooks/useProyectos';
 import ModalFormularioTarea from '../components/ModalFormularioTarea';
 import ModalEliminarTarea from '../components/ModalEliminarTarea';
+import ModalEliminarColaborador from '../components/ModalEliminarColaborador';
 import Tarea from '../components/Tarea';
 import Colaborador from '../components/Colaborador';
 import Alerta from '../components/Alerta';
@@ -25,8 +26,7 @@ const Proyecto = () => {
 
    // console.log(proyecto)
    const { nombre } = proyecto
-
-   console.log(proyecto)
+   // console.log(proyecto)
 
    if(cargando) return 'Cargando...'
 
@@ -109,6 +109,7 @@ const Proyecto = () => {
 
          <ModalFormularioTarea />
          <ModalEliminarTarea />
+         <ModalEliminarColaborador />
       </>       
    )
 }
