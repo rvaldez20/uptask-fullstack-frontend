@@ -437,8 +437,6 @@ const ProyectosProvider = ({children}) => {
          })  
 
          setColaborador({})
-         setAlerta({})
-         
 
 
       } catch (error) {
@@ -457,8 +455,41 @@ const ProyectosProvider = ({children}) => {
       // console.log(colaborador)
    }
 
-   const eliminarColaborador = () => {
-      console.log(colaborador)
+   const eliminarColaborador = async() => {
+      try {
+         //obtenemos el token
+         const token = localStorage.getItem('token');
+
+         // se valida que exista un token         
+         if(!token) return
+
+         // objeto de configuracion de los header 
+         const config = {
+            headers: {
+               "Content-Type": "application/json",
+               Authorization: `Bearer ${token}`
+            }
+         }
+         
+         // hacemos la peticion para enviar el id 
+         const { data } = await clienteAxios.post(`/proyectos/eliminar-colaborador/${proyecto._id}`, {id: colaborador._id}, config);
+
+         // actualizamos el state y el dom
+         const proyectoActualizado = { ...proyecto }
+         proyectoActualizado.colaboradores = proyectoActualizado.colaboradores.filter(colaboradorState => colaboradorState._id !== colaborador._id)
+         setProyecto(proyectoActualizado)
+
+         setAlerta({
+            msg: data.msg,
+            error: false
+         })
+         setColaborador({})
+         setModalEliminarColaborador(false)
+
+
+      } catch (error) {
+         console.log(error.response)
+      }
    }
 
    return(
