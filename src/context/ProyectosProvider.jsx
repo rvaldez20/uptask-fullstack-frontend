@@ -182,10 +182,16 @@ const ProyectosProvider = ({children}) => {
          // quitamos la alerta del dome
          setAlerta({})      
       } catch (error) {
+         navigate('/proyectos')
+
          setAlerta({
             msg: error.response.data.msg,
             error: true
          })
+
+         setTimeout(() => {
+            setAlerta({})
+         }, 3000)
       } finally {
          setCargando(false)
       }   
