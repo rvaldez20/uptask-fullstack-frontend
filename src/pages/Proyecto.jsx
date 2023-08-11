@@ -29,9 +29,9 @@ const Proyecto = () => {
 
    }, [])
 
-   // console.log(proyecto)
+   
    const { nombre } = proyecto
-   // console.log(proyecto)
+   console.log(proyecto)
 
    if(cargando) return 'Cargando...'
 
