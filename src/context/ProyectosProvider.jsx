@@ -176,11 +176,11 @@ const ProyectosProvider = ({children}) => {
 
          // hacemos el request para obtener los proyectos
          const { data } = await clienteAxios.get(`/proyectos/${id}`, config);
-         // console.log(data)
-
          // colocamos el proyecto en el state
          setProyecto(data)
          
+         // quitamos la alerta del dome
+         setAlerta({})      
       } catch (error) {
          setAlerta({
             msg: error.response.data.msg,
@@ -438,6 +438,9 @@ const ProyectosProvider = ({children}) => {
 
          setColaborador({})
 
+         setTimeout(() => {
+            setAlerta({})
+         }, 3000)
 
       } catch (error) {
          setAlerta({
@@ -486,6 +489,9 @@ const ProyectosProvider = ({children}) => {
          setColaborador({})
          setModalEliminarColaborador(false)
 
+         setTimeout(() => {
+            setAlerta({})
+         }, 3000)
 
       } catch (error) {
          console.log(error.response)

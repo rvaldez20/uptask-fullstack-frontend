@@ -37,7 +37,7 @@ const FormularioColaborador = () => {
          <div className="mb-5">            
             <label 
                htmlFor="email"
-               className='text-gray-700, uppercase font-bold text-sm'
+               className='text-gray-700 uppercase font-bold text-sm'
             >Email Colaborador</label>
 
             <input 
