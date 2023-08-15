@@ -1,6 +1,9 @@
 import { useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 
+import io from 'socket.io-client'
+let socket;
+
 import useProyectos from '../hooks/useProyectos';
 import useAdmin from '../hooks/useAdmin'
 
@@ -23,11 +26,27 @@ const Proyecto = () => {
    // console.log(admin)
    
 
+   // useEffect para obtene run proyecto
    useEffect(() => {
       // usamos el hook para tener acceso a la funcion obtenerProyecto
       obtenerProyecto(params.id)   
-
    }, [])
+
+   // useEffect para abrir la conexion al backend y hacemos un vento emit enviando el id del proyecto
+   useEffect(() => {
+      socket = io(import.meta.env.VITE_BACKEND_URL);
+
+      // emitimos un evento y le pasamos el id del proyecto (asignara cada proyecto a un room)
+      socket.emit('abrir proyecto', params.id)
+   }, [])
+
+   // useEffect que se jecutara siempre sin dependendias
+   useEffect(() => {
+      // capturamos el evento de respuesta
+      socket.on('respuesta', (persona) => {
+         console.log(persona)
+      })
+   })
 
    
    const { nombre } = proyecto
