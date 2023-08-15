@@ -12,7 +12,17 @@ const Proyectos = () => {
 
    useEffect(() => {      
       socket = io(import.meta.env.VITE_BACKEND_URL);
-   }, [])
+
+      // emitiendo un evento
+      socket.emit('prueba', proyectos)
+
+      // recibiendo un evento del server
+      socket.on('respuesta', (persona) => {
+         console.log('Desde el frontend')
+         console.log(persona)
+      })
+
+   })
    
 
    const {msg} = alerta
