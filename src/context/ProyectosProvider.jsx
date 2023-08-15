@@ -15,6 +15,7 @@ const ProyectosProvider = ({children}) => {
    const [modalEliminarTarea, setModalEliminarTarea] = useState(false)
    const [colaborador, setColaborador] = useState({})
    const [modalEliminarColaborador, setModalEliminarColaborador] = useState(false)
+   const [buscador, setBuscador] = useState(false)
 
 
    const navigate = useNavigate();
@@ -534,6 +535,11 @@ const ProyectosProvider = ({children}) => {
       }
    }
 
+   // handle para buscar un proyecto
+   const handleBuscador = () => {
+      setBuscador(!buscador)
+   }
+
    return(
       <ProyectosContext.Provider
          value={{
@@ -560,6 +566,8 @@ const ProyectosProvider = ({children}) => {
             handleModalEliminarColaborador,
             eliminarColaborador,
             completarTarea,
+            handleBuscador,
+            buscador,
          }}
       >
          {children}
