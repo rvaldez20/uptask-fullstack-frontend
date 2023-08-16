@@ -327,13 +327,17 @@ const ProyectosProvider = ({children}) => {
          console.log(data)
          
 
-         // actualizamos la tarea actualizada en el state, la que se acaba de editar (data)
-         const proyectoActualizado = { ...proyecto }
-         proyectoActualizado.tareas = proyectoActualizado.tareas.map( tareaState => tareaState._id === data._id ? data : tareaState )
-         setProyecto(proyectoActualizado)
+         /* actualizamos la tarea actualizada en el state, la que se acaba de editar (data)
+          la actualizacion del state la va manejar socket.io*/
+         // const proyectoActualizado = { ...proyecto }
+         // proyectoActualizado.tareas = proyectoActualizado.tareas.map( tareaState => tareaState._id === data._id ? data : tareaState )
+         // setProyecto(proyectoActualizado)        
 
          setAlerta({})                       // limpiamos alertas
          setModalFormularioTarea(false)      // cerrar el modal
+
+          // SOCKET IO
+          socket.emit('actualizar tarea', data)
 
       } catch (error) {
          console.log(error.response)
@@ -568,10 +572,15 @@ const ProyectosProvider = ({children}) => {
       setProyecto(proyectoActualizado)
    }
 
-   const eliminarTareaProyecto = tarea => {
-      // actualizamos la tarea actualizada en el state, la que se acaba de editar (data)
+   const eliminarTareaProyecto = tarea => {      
       const proyectoActualizado = { ...proyecto }
       proyectoActualizado.tareas = proyectoActualizado.tareas.filter( tareaState => tareaState._id !== tarea._id )
+      setProyecto(proyectoActualizado)   
+   }
+
+   const actualizarTareaProyecto = tarea => {
+      const proyectoActualizado = { ...proyecto }
+      proyectoActualizado.tareas = proyectoActualizado.tareas.map( tareaState => tareaState._id === tarea._id ? tarea : tareaState )
       setProyecto(proyectoActualizado)   
    }
 
@@ -605,6 +614,7 @@ const ProyectosProvider = ({children}) => {
             buscador,
             submitTareasProyecto,
             eliminarTareaProyecto,
+            actualizarTareaProyecto,
          }}
       >
          {children}
