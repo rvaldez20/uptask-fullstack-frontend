@@ -380,15 +380,23 @@ const ProyectosProvider = ({children}) => {
          
 
          // actualizamos la tarea actualizada en el state, la que se acaba de editar (data)
-         const proyectoActualizado = { ...proyecto }
-         proyectoActualizado.tareas = proyectoActualizado.tareas.filter( tareaState => tareaState._id !== tarea._id )
-         setProyecto(proyectoActualizado)         
+         // la actualizacion del state la va manejar socket.io
+         // const proyectoActualizado = { ...proyecto }
+         // proyectoActualizado.tareas = proyectoActualizado.tareas.filter( tareaState => tareaState._id !== tarea._id )
+         // setProyecto(proyectoActualizado)      
+
          setModalEliminarTarea(false)        // cerrar el modal        
          
+      
+         // SOCKET IO
+         socket.emit('eliminar tarea', tarea)
+
+         // despues de emitir a socket seteamos la tarea
+         setTarea({})
          setTimeout(() => {
             setAlerta({})            
-         }, 3000);        
-         
+         }, 3000);
+
       } catch (error) {
          console.log(error)
       }
@@ -554,10 +562,17 @@ const ProyectosProvider = ({children}) => {
    }
 
    //SOCKET IO
-   const submitTareasProyecto = (tarea) => {
+   const submitTareasProyecto = tarea => {
       const proyectoActualizado = { ...proyecto }
       proyectoActualizado.tareas = [ ...proyectoActualizado.tareas, tarea]
       setProyecto(proyectoActualizado)
+   }
+
+   const eliminarTareaProyecto = tarea => {
+      // actualizamos la tarea actualizada en el state, la que se acaba de editar (data)
+      const proyectoActualizado = { ...proyecto }
+      proyectoActualizado.tareas = proyectoActualizado.tareas.filter( tareaState => tareaState._id !== tarea._id )
+      setProyecto(proyectoActualizado)   
    }
 
    return(
@@ -589,6 +604,7 @@ const ProyectosProvider = ({children}) => {
             handleBuscador,
             buscador,
             submitTareasProyecto,
+            eliminarTareaProyecto,
          }}
       >
          {children}

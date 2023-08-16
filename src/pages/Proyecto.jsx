@@ -21,7 +21,8 @@ const Proyecto = () => {
    // obenemos el id del pryecto que queremos visaulizar
    const params = useParams();
    
-   const { obtenerProyecto, proyecto, cargando, handleModalTarea, alerta, submitTareasProyecto } = useProyectos();
+   const { obtenerProyecto, proyecto, cargando, handleModalTarea, alerta, submitTareasProyecto, eliminarTareaProyecto } = useProyectos();
+   
    const admin = useAdmin()
    // console.log(admin)
    
@@ -42,11 +43,17 @@ const Proyecto = () => {
 
    // useEffect que se jecutara siempre sin dependendias
    useEffect(() => {
-      // capturamos el evento de respuesta
+      // evento .on para actualizar una neuva tarea en todos los usuarios que esten en ese proyecto
       socket.on('tarea agregada', tareaNueva => {
          if(tareaNueva.proyecto === proyecto._id) {
             // solo actualiza la tarea que corresponde al proyecto
             submitTareasProyecto(tareaNueva)         
+         }
+      })
+
+      socket.on('tarea eliminada', tareaEliminada => {
+         if(tareaEliminada.proyecto === proyecto._id) {
+            eliminarTareaProyecto(tareaEliminada)
          }
       })
    })
