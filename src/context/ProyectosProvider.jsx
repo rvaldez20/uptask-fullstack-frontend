@@ -2,6 +2,9 @@ import { useState, useEffect, createContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import clienteAxios from '../config/clienteAxios'
 
+import io from 'socket.io-client'
+let socket;
+
 const ProyectosContext = createContext();
 
 const ProyectosProvider = ({children}) => {
@@ -49,6 +52,12 @@ const ProyectosProvider = ({children}) => {
          }
       }
       obtenerProyectos();
+   }, [])
+
+   // useEffect para conexion con socket.io
+   useEffect(() => {
+      // conexion de socket.io con el backend
+      socket = io(import.meta.env.VITE_BACKEND_URL)      
    }, [])
    
 
@@ -279,13 +288,17 @@ const ProyectosProvider = ({children}) => {
          const { data } = await clienteAxios.post('/tareas', tarea, config)  
          // console.log(data)
 
-         // actualizamos la tarea al state, la que se acaba de dar de alta(data)
-         const proyectoActualizado = { ...proyecto }
-         proyectoActualizado.tareas = [ ...proyecto.tareas, data]
-         setProyecto(proyectoActualizado)
+         // actualizamos la tarea al state, la que se acaba de dar de alta(data) => 
+         // la actualizacion del state la va manejar socket.io
+         // const proyectoActualizado = { ...proyecto }
+         // proyectoActualizado.tareas = [ ...proyecto.tareas, data]
+         // setProyecto(proyectoActualizado)
 
          setAlerta({})                       // limpiamos alertas
          setModalFormularioTarea(false)      // cerrar el modal
+
+         // SOCKET IO
+         socket.emit('nueva tarea', data)
 
       } catch (error) {
          console.log(error.response)
@@ -540,6 +553,13 @@ const ProyectosProvider = ({children}) => {
       setBuscador(!buscador)
    }
 
+   //SOCKET IO
+   const submitTareasProyecto = (tarea) => {
+      const proyectoActualizado = { ...proyecto }
+      proyectoActualizado.tareas = [ ...proyectoActualizado.tareas, tarea]
+      setProyecto(proyectoActualizado)
+   }
+
    return(
       <ProyectosContext.Provider
          value={{
@@ -568,6 +588,7 @@ const ProyectosProvider = ({children}) => {
             completarTarea,
             handleBuscador,
             buscador,
+            submitTareasProyecto,
          }}
       >
          {children}
