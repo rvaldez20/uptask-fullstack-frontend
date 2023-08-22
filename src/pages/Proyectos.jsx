@@ -1,10 +1,13 @@
+import { useEffect } from 'react'
 import PreviewProyecto from '../components/PreviewProyecto';
 import useProyectos from '../hooks/useProyectos'
 import Alerta from '../components/Alerta';
 
+
 const Proyectos = () => {
 
    const { proyectos, alerta } = useProyectos();   
+ 
 
    const {msg} = alerta
 

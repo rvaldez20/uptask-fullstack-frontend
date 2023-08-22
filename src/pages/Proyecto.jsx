@@ -1,6 +1,9 @@
 import { useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 
+import io from 'socket.io-client'
+let socket;
+
 import useProyectos from '../hooks/useProyectos';
 import useAdmin from '../hooks/useAdmin'
 
@@ -18,16 +21,54 @@ const Proyecto = () => {
    // obenemos el id del pryecto que queremos visaulizar
    const params = useParams();
    
-   const { obtenerProyecto, proyecto, cargando, handleModalTarea, alerta } = useProyectos();
+   const { obtenerProyecto, proyecto, cargando, handleModalTarea, alerta, submitTareasProyecto, eliminarTareaProyecto, actualizarTareaProyecto, cambiarEstadoTarea } = useProyectos();
+   
    const admin = useAdmin()
    // console.log(admin)
    
 
+   // useEffect para obtene run proyecto
    useEffect(() => {
       // usamos el hook para tener acceso a la funcion obtenerProyecto
       obtenerProyecto(params.id)   
-
    }, [])
+
+   // useEffect para abrir la conexion al backend y hacemos un vento emit enviando el id del proyecto
+   useEffect(() => {
+      socket = io(import.meta.env.VITE_BACKEND_URL);
+
+      // emitimos un evento y le pasamos el id del proyecto (asignara cada proyecto a un room)
+      socket.emit('abrir proyecto', params.id)
+   }, [])
+
+   // useEffect que se jecutara siempre sin dependendias
+   useEffect(() => {
+      // evento .on para actualizar una neuva tarea en todos los usuarios que esten en ese proyecto
+      socket.on('tarea agregada', tareaNueva => {
+         if(tareaNueva.proyecto === proyecto._id) {
+            // solo actualiza la tarea que corresponde al proyecto
+            submitTareasProyecto(tareaNueva)         
+         }
+      })
+
+      socket.on('tarea eliminada', tareaEliminada => {
+         if(tareaEliminada.proyecto === proyecto._id) {
+            eliminarTareaProyecto(tareaEliminada)
+         }
+      })
+
+      socket.on('tarea actualizada', tareaActualizada => {
+         if(tareaActualizada.proyecto._id === proyecto._id){
+            actualizarTareaProyecto(tareaActualizada)
+         }
+      })
+
+      socket.on('nuevo estado', nuevoEstadoTarea => {
+         if(nuevoEstadoTarea.proyecto._id === proyecto._id){
+            cambiarEstadoTarea(nuevoEstadoTarea)
+         }
+      })
+   })
 
    
    const { nombre } = proyecto

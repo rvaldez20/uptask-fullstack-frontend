@@ -1,6 +1,6 @@
 
 export const formatearFecha = fecha => {
-   console.log()
+   // console.log()
    // const fecha1 = "2023-09-10"   
    // const fecha2 = "09-10-2023"
 
