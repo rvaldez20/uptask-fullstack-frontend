@@ -595,6 +595,13 @@ const ProyectosProvider = ({children}) => {
       setProyecto(proyectoActualizado)    
    }
 
+   // close session
+   const cerrarSesionProyectos = () => {
+      setProyectos([])
+      setProyecto({})
+      setAlerta({})
+   }
+
    return(
       <ProyectosContext.Provider
          value={{
@@ -627,6 +634,7 @@ const ProyectosProvider = ({children}) => {
             eliminarTareaProyecto,
             actualizarTareaProyecto,
             cambiarEstadoTarea,
+            cerrarSesionProyectos,
          }}
       >
          {children}

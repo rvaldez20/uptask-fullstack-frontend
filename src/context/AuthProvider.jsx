@@ -47,6 +47,10 @@ const AuthProvider = ({ children }) => {
       }
       autenticarUsuario();
    }, [])
+
+   const cerrarSesionAuth = () => {      
+      setAuth({})      
+   }
    
 
    return (
@@ -55,6 +59,7 @@ const AuthProvider = ({ children }) => {
             auth,
             setAuth,
             cargando,
+            cerrarSesionAuth,
          }}
       >
          {children}
